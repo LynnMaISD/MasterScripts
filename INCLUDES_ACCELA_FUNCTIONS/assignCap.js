@@ -1,35 +1,49 @@
 
-function assignCap(assignId) // option CapId
-	{
-	var itemCap = capId
-	if (arguments.length > 1) itemCap = arguments[1]; // use cap ID specified in args
+function assignCap(assignId) // optional CapId
+{
+    var itemCap = capId;
+    if (arguments.length > 1)
+        itemCap = arguments[1]; // use cap ID specified in args
 
-	var cdScriptObjResult = aa.cap.getCapDetail(itemCap);
-	if (!cdScriptObjResult.getSuccess())
-		{ logDebug("**ERROR: No cap detail script object : " + cdScriptObjResult.getErrorMessage()) ; return false; }
+    var cdScriptObjResult = aa.cap.getCapDetail(itemCap);
+    if (!cdScriptObjResult.getSuccess())
+    {
+        logDebug("**ERROR: No cap detail script object : " + cdScriptObjResult.getErrorMessage());
+        return false;
+    }
 
-	var cdScriptObj = cdScriptObjResult.getOutput();
+    var cdScriptObj = cdScriptObjResult.getOutput();
 
-	if (!cdScriptObj)
-		{ logDebug("**ERROR: No cap detail script object") ; return false; }
+    if (!cdScriptObj)
+    {
+        logDebug("**ERROR: No cap detail script object");
+        return false;
+    }
 
-	cd = cdScriptObj.getCapDetailModel();
+    cd = cdScriptObj.getCapDetailModel();
 
-	iNameResult  = aa.person.getUser(assignId);
+    iNameResult = aa.person.getUser(assignId);
 
-	if (!iNameResult.getSuccess())
-		{ logDebug("**ERROR retrieving  user model " + assignId + " : " + iNameResult.getErrorMessage()) ; return false ; }
+    if (!iNameResult.getSuccess())
+    {
+        logDebug("**ERROR retrieving  user model " + assignId + " : " + iNameResult.getErrorMessage());
+        return false;
+    }
 
-	iName = iNameResult.getOutput();
+    iName = iNameResult.getOutput();
 
-	cd.setAsgnDept(iName.getDeptOfUser());
-	cd.setAsgnStaff(assignId);
+    cd.setAsgnDept(iName.getDeptOfUser());
+    cd.setAsgnStaff(assignId);
 
-	cdWrite = aa.cap.editCapDetail(cd)
+    cdWrite = aa.cap.editCapDetail(cd);
 
-	if (cdWrite.getSuccess())
-		{ logDebug("Assigned CAP to " + assignId) }
-	else
-		{ logDebug("**ERROR writing capdetail : " + cdWrite.getErrorMessage()) ; return false ; }
-	}
-
+    if (cdWrite.getSuccess())
+    {
+        logDebug("Assigned CAP to " + assignId);
+    }
+    else
+    {
+        logDebug("**ERROR writing capdetail : " + cdWrite.getErrorMessage());
+        return false;
+    }
+}
